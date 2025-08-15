@@ -41,7 +41,6 @@ module fifo #(
     assign empty = (wr_addr == re_addr);
 
 
-
     // assign data_out = fifo[re_addr];
 
 endmodule
