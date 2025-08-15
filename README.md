@@ -1,8 +1,8 @@
 # AXI-Lite UART Controller
 
-This SystemVerilog core contains a complete UART implementation with AXI-Lite interface, configurable via a single 32-bit register for just about any baud rate, one or two stop bits, five through eight data bits, and odd, even, mark, or space parity. If you are looking for an example SystemVerilog UART module containing all these features with formal verification, then you have just found it.
+This SystemVerilog core contains a complete UART implementation with AXI-Lite interface, configurable via a single 32-bit register for just about any baud rate, one or two stop bits, five through eight data bits, and odd, even, mark, or space parity.
 
-The module goes beyond simple transmit and receive to include a synchronous FIFO and complete AXI-Lite slave interface. Unlike other UART controllers, this implementation can be configured with a single 32-bit register write, making setup simple and straightforward.
+The module goes beyond simple transmit and receive to include a synchronous FIFO and complete AXI-Lite interface. Unlike other UART controllers, this implementation can be configured with a single 32-bit register write, making setup simple and straightforward.
 
 ## Features
 
@@ -61,4 +61,3 @@ make formal_verify     # Formal verification
 ```
 
 Includes comprehensive testbenches and formal verification with SystemVerilog Assertions.
-
