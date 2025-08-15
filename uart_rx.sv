@@ -15,7 +15,7 @@ module uart_rx #(
     enum logic [1:0] {IDLE, START, RECEIVING, STOP} state, nextState;
 
 
-    logic baud, half_baud, start_baud;
+    logic baud, half_baud, start_baud, finished;
     baud_gen timing_generator(.valid(start_baud), .*);
   
 
@@ -35,7 +35,7 @@ module uart_rx #(
                RECEIVING: begin
                     if (half_baud) begin
                         received <= received + 1;
-                        shift_reg <= {curr, shift_reg[DATA_WIDTH - 1:1]}; 
+                        shift_reg <= {rx_in, shift_reg[DATA_WIDTH - 1:1]}; 
                         // should i use curr here??
                     end
                end    
@@ -56,18 +56,19 @@ module uart_rx #(
         endcase
     end
     assign ready = (state == IDLE);
-    assign frame_error = ((nextState == STOP) & half_baud) & ~rx_in;
-    // assign frame_error = (state == STOP) & ~rx_in;
-    assign valid = ((nextState == STOP) ) & ~frame_error;
-    // assign valid = ~frame_error & baud;
-
-// LETS FIGURE THIS OUT FORRRRRRRRR REALLLLLLLLLLL
+    assign frame_error = (state == STOP) & ~rx_in;
+    assign finished = ((state == RECEIVING) && (nextState == STOP) && ~frame_error && baud);
 
     always_ff @(posedge clk) begin
-        if (reset)
+        if (reset) begin
             data <= 'h0;
-        else if (((nextState == STOP)) & ~frame_error)
+            valid <= 1'b0;
+
+        end
+        else if (finished) begin
             data <= shift_reg;
+            valid <= 1'b1;
+        end
     end
 
 
